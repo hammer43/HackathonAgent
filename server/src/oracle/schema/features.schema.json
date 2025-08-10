@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "required": [
+    "anchor_price",
+    "inv_pressure",
+    "comp_idx",
+    "event_score",
+    "lead_time"
+  ],
+  "properties": {
+    "anchor_price": {
+      "type": "number",
+      "minimum": 0.01
+    },
+    "inv_pressure": {
+      "type": "number",
+      "minimum": 0.5,
+      "maximum": 2.0
+    },
+    "comp_idx": {
+      "type": "number",
+      "minimum": 0.5,
+      "maximum": 2.0
+    },
+    "event_score": {
+      "type": "number",
+      "minimum": 0.5,
+      "maximum": 2.0
+    },
+    "lead_time": {
+      "type": "number",
+      "minimum": 0
+    }
+  }
+}

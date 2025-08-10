@@ -1,0 +1,51 @@
+{
+  "type": "object",
+  "required": [
+    "version",
+    "context",
+    "workflow"
+  ],
+  "properties": {
+    "version": {
+      "type": "string",
+      "enum": [
+        "1"
+      ]
+    },
+    "context": {
+      "type": "object"
+    },
+    "workflow": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "step"
+        ],
+        "properties": {
+          "step": {
+            "type": "string",
+            "enum": [
+              "ingest_po",
+              "extract_items",
+              "fetch_features",
+              "price",
+              "apply_policy",
+              "generate_invoice",
+              "report_snapshot"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "args": {
+            "type": "object"
+          },
+          "out": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

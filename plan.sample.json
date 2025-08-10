@@ -1,0 +1,40 @@
+{
+  "version": "1",
+  "context": {
+    "vertical": "flower",
+    "sku": "ROSE-12",
+    "qty": 24,
+    "date": "2025-08-16",
+    "strategy": "thompson",
+    "epsilon": 0.05
+  },
+  "workflow": [
+    {
+      "step": "fetch_features",
+      "id": "feat1"
+    },
+    {
+      "step": "price",
+      "id": "price1"
+    },
+    {
+      "step": "apply_policy",
+      "id": "policy1"
+    },
+    {
+      "step": "generate_invoice",
+      "id": "inv1",
+      "args": {
+        "po": "PO-4482"
+      }
+    },
+    {
+      "step": "report_snapshot",
+      "id": "rep1",
+      "args": {
+        "sku": "${context.sku}",
+        "days": 7
+      }
+    }
+  ]
+}
