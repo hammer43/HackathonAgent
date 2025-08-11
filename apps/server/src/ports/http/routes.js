@@ -57,6 +57,10 @@ export const apiRouter = express.Router();
 
 apiRouter.use('/docs', swaggerUi.serve, swaggerUi.setup(openapi));
 
+// admin
+import { adminRouter } from './adminRoutes.js';
+apiRouter.use('/admin', adminRouter);
+
 const trpcHandler = createHTTPHandler({ router: appRouter });
 apiRouter.use("/trpc", (req, res) => trpcHandler(req, res));
 

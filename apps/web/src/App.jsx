@@ -8,6 +8,7 @@ import { Card, CardHeader, CardContent, CardTitle } from "./components/ui/Card.j
 import { Button } from "./components/ui/Button.jsx";
 import ChatPanel from "./components/ChatPanel.jsx";
 import AlgorithmChips from "./components/AlgorithmChips.jsx";
+import AdminCard from "./features/admin/ui/AdminCard.jsx";
 
 export default function App(){
   const [vertical, setVertical] = useState("flower");
@@ -207,6 +208,7 @@ export default function App(){
       </div>
 
       <ChatPanel onIntent={onAssistantIntent} tall className="mt-2" />
+      <AdminCard />
     </div>
   );
 }
