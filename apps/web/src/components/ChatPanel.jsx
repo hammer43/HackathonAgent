@@ -26,7 +26,13 @@ export default function ChatPanel({ onIntent, disabled, tall=false, className=""
 
   return (
     <div className={container}>
-      <div className="p-4 border-b"><h2 className="text-lg font-semibold">Assistant</h2></div>
+      <div className="p-4 border-b flex items-center justify-between">
+        <h2 className="text-lg font-semibold">Assistant</h2>
+        <div className="text-xs text-gray-500 flex items-center gap-3">
+          <a className="underline" href="/api/docs" target="_blank" rel="noreferrer">REST docs</a>
+          <a className="underline" href="/api/trpc" target="_blank" rel="noreferrer">tRPC</a>
+        </div>
+      </div>
       <div className={`p-4 space-y-2 overflow-auto ${scrollMax} ${minH} resize-y`}>
         {msgs.map((m,i)=> (
           <div key={i} className={m.role==="user"?"text-right":"text-left"}>

@@ -4,6 +4,8 @@ import { choosePrice } from '../../pricing/orchestrator.js';
 import { createInvoice } from '@smart/core-domain/invoicing';
 import { PricingAgent } from '@smart/agents/pricing';
 import { InvoiceAgent } from '@smart/agents/invoicing';
+import { PlanSchema } from '@smart/shared/schemas';
+import { executePlan } from '../../tools/executor.js';
 
 const t = initTRPC.create();
 
@@ -34,6 +36,13 @@ export const appRouter = t.router({
       .mutation(async ({ input }) => {
         const agent = await InvoiceAgent({ createInvoicePort: createInvoice }, input);
         return agent.invoice;
+      })
+  }),
+  orchestration: t.router({
+    runPlan: t.procedure
+      .input(PlanSchema)
+      .mutation(async ({ input }) => {
+        return executePlan(input);
       })
   })
 });

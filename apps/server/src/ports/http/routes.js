@@ -10,8 +10,26 @@ import { askLLM, llmHealthCheck } from "../../llm/client.js";
 import { PricingChooseRequestSchema, InvoiceCreateRequestSchema } from "@smart/shared/schemas";
 import { appRouter } from "./trpc.js";
 import { createHTTPHandler } from "@trpc/server/adapters/standalone";
+import swaggerUi from 'swagger-ui-express';
+
+const openapi = {
+  openapi: '3.0.0',
+  info: { title: 'Smart APIs', version: '1.0.0' },
+  paths: {
+    '/api/health': { get: { summary: 'Health check' } },
+    '/api/pricing/choose': { post: { summary: 'Choose price' } },
+    '/api/invoice/create': { post: { summary: 'Create invoice' } },
+    '/api/report/kpis': { get: { summary: 'KPIs' } },
+    '/api/report/conversion-by-price': { get: { summary: 'Conversion by price' } },
+    '/api/report/algorithm-mix': { get: { summary: 'Algorithm mix' } },
+    '/api/execute-plan': { post: { summary: 'Execute plan (legacy)' } },
+  }
+};
 
 export const apiRouter = express.Router();
+
+// docs
+apiRouter.use('/docs', swaggerUi.serve, swaggerUi.setup(openapi));
 
 // mount tRPC as sub-app
 const trpcHandler = createHTTPHandler({ router: appRouter });

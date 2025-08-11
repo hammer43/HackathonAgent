@@ -17,6 +17,7 @@
     "@smart/data-oracles": "workspace:*",
     "@smart/agents": "workspace:*",
     "zod": "^3.23.8",
-    "@trpc/server": "^11.0.0-rc.660"
+    "@trpc/server": "^11.0.0-rc.660",
+    "swagger-ui-express": "^5.0.1"
   }
 }
