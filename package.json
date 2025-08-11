@@ -10,13 +10,14 @@
   "scripts": {
     "dev:server": "pnpm --filter ./apps/server dev",
     "dev:web": "pnpm --filter ./apps/web dev",
-    "build": "pnpm -r build",
-    "lint": "eslint .",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
     "format": "prettier -w .",
-    "test": "echo no-tests-yet"
+    "test": "turbo run test"
   },
   "devDependencies": {
     "eslint": "^9.8.0",
-    "prettier": "^3.3.3"
+    "prettier": "^3.3.3",
+    "turbo": "^2.0.14"
   }
 }

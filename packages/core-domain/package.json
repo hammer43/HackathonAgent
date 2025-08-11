@@ -5,6 +5,7 @@
   "private": true,
   "exports": {
     "./pricing": "./src/pricing/index.js",
-    "./invoicing": "./src/invoicing/index.js"
+    "./invoicing": "./src/invoicing/index.js",
+    "./analytics": "./src/analytics/index.js"
   }
 }

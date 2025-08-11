@@ -1,7 +1,6 @@
 import { featuresFacade } from "../oracle/facade.js";
-import { priceElasticity, clamp, priceAnchor, pricePromo } from "@smart/core-domain/pricing";
-import { epsilonGreedy } from "./strategies/epsilonGreedy.js";
-import { thompson } from "./strategies/thompson.js";
+import { priceElasticity, clamp, priceAnchor, pricePromo, epsilonGreedy, thompsonSelect } from "@smart/core-domain/pricing";
+import { getBeta } from "../memory/banditRepo.js";
 
 function pBuy(price, anchor){ const x=(anchor-price)/Math.max(anchor*0.2,1); return 1/(1+Math.exp(-3*x)); }
 function round2(n){ return Math.round(n*100)/100; }
@@ -16,7 +15,7 @@ export async function choosePrice({ sku, date, epsilon=0.05, strategy="epsilon" 
     { model:"Promo",      price: round2(pricePromo(base)) },
   ].map(c => ({ ...c, p_buy: pBuy(c.price, base), rev: c.price * pBuy(c.price, base) }));
 
-  const picked = strategy==="thompson" ? thompson(candidates, sku) : epsilonGreedy(candidates, epsilon);
+  const picked = strategy==="thompson" ? thompsonSelect(candidates, sku, getBeta) : epsilonGreedy(candidates, epsilon);
   const raw = picked.price;
   const final = round2(clamp(raw, base));
   const clamps = final!==raw ? ["Cap ±20% vs anchor"] : [];
