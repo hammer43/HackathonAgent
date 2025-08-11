@@ -13,6 +13,7 @@
     "openai": "^5.12.2",
     "@smart/core-domain": "workspace:*",
     "@smart/shared": "workspace:*",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "@trpc/server": "^11.0.0-rc.660"
   }
 }

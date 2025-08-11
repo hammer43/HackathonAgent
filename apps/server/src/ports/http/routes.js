@@ -8,8 +8,14 @@ import { executePlan } from "../../tools/executor.js";
 import { reportKpis, reportConvByPrice, reportAlgoMix } from "../../tools/reportUtils.js";
 import { askLLM, llmHealthCheck } from "../../llm/client.js";
 import { PricingChooseRequestSchema, InvoiceCreateRequestSchema } from "@smart/shared/schemas";
+import { appRouter } from "./trpc.js";
+import { createHTTPHandler } from "@trpc/server/adapters/standalone";
 
 export const apiRouter = express.Router();
+
+// mount tRPC as sub-app
+const trpcHandler = createHTTPHandler({ router: appRouter });
+apiRouter.use("/trpc", (req, res) => trpcHandler(req, res));
 
 apiRouter.get("/health", async (_req, res) => {
   const llm = await llmHealthCheck();
