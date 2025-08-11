@@ -30,7 +30,7 @@ const openapi = {
       post: {
         summary: 'Choose price',
         requestBody: { required: true, content: { 'application/json': { schema: { $ref: '#/components/schemas/PricingChooseRequest' }, example: { sku: 'ROSE-12', date: '2024-08-10', strategy: 'thompson' } } } },
-        responses: { '200': { description: 'Decision', content: { 'application/json': { example: { sku: 'ROSE-12', price: 49.5, selection: { model: 'Elasticity' } } } } } }
+        responses: { '200': { description: 'Decision', content: { 'application/json': { example: { sku: 'ROSE-12', date: '2024-08-10', strategy: 'thompson', price: 49.5, raw: 49.5, clamps: [], selection: { model: 'Elasticity', price: 49.5, p_buy: 0.42, rev: 20.8 }, candidates: [{ model: 'Elasticity', price: 49.5, p_buy: 0.42, rev: 20.8 }, { model: 'Anchor', price: 49 }], features: { anchor_price: 49, inv_pressure: 1.0, comp_idx: 0.97, event_score: 1.12, lead_time: 6 }, notes: 'Thompson Sampling picked Elasticity' } } } } }
       }
     },
     '/api/invoice/create': {

@@ -7,31 +7,31 @@ TAP version 13
 # Subtest: pricing.quote returns a decision with price
 ok 1 - pricing.quote returns a decision with price
   ---
-  duration_ms: 2.018647
+  duration_ms: 2.212922
   type: 'test'
   ...
 # Subtest: pricing.agentQuote returns a decision with price
 ok 2 - pricing.agentQuote returns a decision with price
   ---
-  duration_ms: 0.451788
+  duration_ms: 0.509137
   type: 'test'
   ...
 # Subtest: invoicing.issue returns an invoice with totals
 ok 3 - invoicing.issue returns an invoice with totals
   ---
-  duration_ms: 0.547889
+  duration_ms: 0.582404
   type: 'test'
   ...
 # Subtest: invoicing.agentIssue returns an invoice with totals
 ok 4 - invoicing.agentIssue returns an invoice with totals
   ---
-  duration_ms: 0.39427
+  duration_ms: 0.366217
   type: 'test'
   ...
 # Subtest: featuresFacade returns validated features
 ok 5 - featuresFacade returns validated features
   ---
-  duration_ms: 1.418924
+  duration_ms: 1.307387
   type: 'test'
   ...
 1..5
@@ -42,4 +42,4 @@ ok 5 - featuresFacade returns validated features
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 97.166337
+# duration_ms 112.440996
