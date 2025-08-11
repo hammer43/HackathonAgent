@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Run {
+  id        Int      @id @default(autoincrement())
+  ts        DateTime @default(now())
+  type      String
+  json      String   // store as JSON string
+}
+
+model Exposure {
+  id        Int      @id @default(autoincrement())
+  ts        DateTime @default(now())
+  sku       String
+  model     String?
+  strategy  String?
+  price     Float
+  p_buy     Float?
+  rev_pred  Float?
+}
+
+model Outcome {
+  id        Int      @id @default(autoincrement())
+  ts        DateTime @default(now())
+  sku       String
+  model     String
+  success   Boolean
+}

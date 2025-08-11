@@ -2,7 +2,7 @@ import express from "express";
 import { featuresFacade } from "../../oracle/facade.js";
 import { choosePrice } from "../../pricing/orchestrator.js";
 import { createInvoice } from "@smart/core-domain/invoicing";
-import { recordRun, recordExposure } from "../../memory/runsRepo.js";
+import { recordRun, recordExposure } from "../db/index.js";
 import { evaluator } from "../../reflection/evaluator.js";
 import { executePlan } from "../../tools/executor.js";
 import { reportKpis, reportConvByPrice, reportAlgoMix } from "../../tools/reportUtils.js";

@@ -1,4 +1,4 @@
-import { getStores } from "../memory/runsRepo.js";
+import { getStores } from "../ports/db/index.js";
 import { kpisFrom, convByPriceFrom, algoMixFrom } from "@smart/core-domain/analytics";
 
 export async function reportKpis(days=7){
