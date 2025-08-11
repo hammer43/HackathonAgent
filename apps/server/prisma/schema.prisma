@@ -32,3 +32,9 @@ model Outcome {
   model     String
   success   Boolean
 }
+
+model Flag {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}

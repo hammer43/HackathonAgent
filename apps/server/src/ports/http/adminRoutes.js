@@ -1,18 +1,25 @@
 import express from 'express';
 import { getRecentRuns, getRecentExposures, getRecentOutcomes } from '../db/queryRepo.js';
+import { getAllFlags, setFlag as setFlagDb } from '../db/flagsRepo.js';
 
 export const adminRouter = express.Router();
 
-const flags = { pricing_thompson_enabled: true };
+let memFlags = { pricing_thompson_enabled: true };
 
-adminRouter.get('/flags', (_req, res) => {
-  res.json(flags);
+adminRouter.get('/flags', async (_req, res) => {
+  try {
+    const flags = await getAllFlags();
+    res.json({ ...memFlags, ...flags });
+  } catch {
+    res.json(memFlags);
+  }
 });
 
-adminRouter.post('/flags/:key', (req, res) => {
+adminRouter.post('/flags/:key', async (req, res) => {
   const { key } = req.params;
   const { value } = req.body || {};
-  flags[key] = !!value;
+  memFlags[key] = !!value;
+  try { await setFlagDb(key, String(!!value)); } catch {}
   res.json({ ok: true, key, value: !!value });
 });
 
