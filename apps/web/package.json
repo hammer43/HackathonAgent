@@ -11,7 +11,9 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "lucide-react": "^0.452.0"
+    "lucide-react": "^0.452.0",
+    "@trpc/client": "^11.0.0-rc.660",
+    "@smart/shared": "workspace:*"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.0",

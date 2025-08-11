@@ -1,0 +1,14 @@
+{
+  "name": "@smart/config",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "zod": "^3.23.8"
+  },
+  "exports": {
+    "./env": "./src/env.js",
+    "./eslint": "./eslint.config.js",
+    "./prettier": "./prettier.config.js"
+  }
+}

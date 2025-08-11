@@ -14,5 +14,7 @@ app.use((err, req, res, next) => {
   res.status(400).json({ ok: false, error: String(err.message || err) });
 });
 
-const PORT = process.env.PORT || 8787;
+import { loadEnv } from "@smart/config/env";
+const env = loadEnv(process.env);
+const PORT = Number(env.PORT || 8787);
 app.listen(PORT, () => console.log(`Server http://localhost:${PORT}`));
