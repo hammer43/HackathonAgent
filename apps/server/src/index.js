@@ -1,0 +1,20 @@
+import 'dotenv/config';
+import express from "express";
+import cors from "cors";
+import { apiRouter } from "./ports/http/routes.js";
+import { loadEnv } from "@smart/config/env";
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.use("/api", apiRouter);
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(400).json({ ok: false, error: String(err.message || err) });
+});
+
+const env = loadEnv(process.env);
+const PORT = Number(env.PORT || 8787);
+app.listen(PORT, () => console.log(`Server http://localhost:${PORT}`));

@@ -1,0 +1,17 @@
+{
+  "name": "@smart/agents",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "@smart/core-domain": "workspace:*",
+    "zod": "^3.23.8"
+  },
+  "exports": {
+    "./planner": "./src/planner/index.js",
+    "./planningAgent": "./src/planner/planningAgent.js",
+    "./registry": "./src/registry/index.js",
+    "./pricing": "./src/agents/pricingAgent.js",
+    "./invoicing": "./src/agents/invoiceAgent.js"
+  }
+}

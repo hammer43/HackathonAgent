@@ -1,0 +1,14 @@
+{
+  "name": "@smart/shared",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "zod": "^3.23.8",
+    "@trpc/client": "^11.0.0-rc.660"
+  },
+  "exports": {
+    "./guards": "./src/guards/index.js",
+    "./schemas": "./src/schemas/index.js"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "@smart/core-domain",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    "./pricing": "./src/pricing/index.js",
+    "./invoicing": "./src/invoicing/index.js",
+    "./analytics": "./src/analytics/index.js"
+  }
+}

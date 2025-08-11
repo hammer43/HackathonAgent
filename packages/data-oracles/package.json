@@ -1,0 +1,10 @@
+{
+  "name": "@smart/data-oracles",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    "./adapters/mock": "./src/adapters/mock.js",
+    "./normalizers/features": "./src/normalizers/features.js"
+  }
+}
