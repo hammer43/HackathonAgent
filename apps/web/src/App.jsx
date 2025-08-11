@@ -1,4 +1,7 @@
 import { api } from "./lib/api";
+import * as pricingApi from "./features/pricing/api";
+import * as invoicingApi from "./features/invoicing/api";
+import * as reportApi from "./features/reporting/api";
 import React, { useEffect, useState } from "react";
 import { Settings2, TrendingUp, ReceiptText, BarChart3 } from "lucide-react";
 import { Card, CardHeader, CardContent, CardTitle } from "./components/ui/Card.jsx";
@@ -25,7 +28,7 @@ export default function App(){
   async function simulate(){
     const sku = vertical==="flower" ? "ROSE-12" : (vertical==="travel" ? "ATV-COAST-3H" : "ROSE-12");
     const date = new Date().toISOString().slice(0,10);
-    const data = await api.choose({ sku, date, epsilon, strategy });
+    const data = await pricingApi.choose({ sku, date, epsilon, strategy });
     setDecision({
       sku, model: data.selection?.model, final:data.price, raw:data.raw, clamps:data.clamps,
       rationale:`${data.notes}. Signals: event ${data.features.event_score.toFixed(2)}, inv ${data.features.inv_pressure.toFixed(2)}, comp ${data.features.comp_idx.toFixed(2)}.`
@@ -35,7 +38,7 @@ export default function App(){
 
   async function draftInvoice(){
     if (!decision) return;
-    const inv = await api.invoice({ po:"PO-4482", lines:[{ sku: decision.sku || "ROSE-12", qty: 24, unit_price: decision.final }] });
+    const inv = await invoicingApi.invoice({ po:"PO-4482", lines:[{ sku: decision.sku || "ROSE-12", qty: 24, unit_price: decision.final }] });
     const blob = new Blob([JSON.stringify(inv, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob); const a = document.createElement("a");
     a.href = url; a.download = `invoice-${inv.invoice_id}.json`; a.click(); URL.revokeObjectURL(url);
@@ -60,7 +63,7 @@ export default function App(){
  
 
   async function loadReports(){
-    const [k, c, m] = await Promise.all([ api.report.kpis(7), api.report.conv(reportSku, 6), api.report.mix(reportSku) ]);
+    const [k, c, m] = await Promise.all([ reportApi.getKPIs(7), reportApi.getConversion(reportSku, 6), reportApi.getAlgoMix(reportSku) ]);
     setKpis(k); setConv(c); setMix(m);
   }
   useEffect(()=>{ loadReports(); }, [reportSku]);

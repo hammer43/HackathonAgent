@@ -20,6 +20,9 @@ importers:
       '@smart/core-domain':
         specifier: workspace:*
         version: link:../../packages/core-domain
+      '@smart/data-oracles':
+        specifier: workspace:*
+        version: link:../../packages/data-oracles
       '@smart/shared':
         specifier: workspace:*
         version: link:../../packages/shared

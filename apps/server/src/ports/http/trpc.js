@@ -1,6 +1,5 @@
 import { initTRPC } from '@trpc/server';
 import { z } from 'zod';
-import { featuresFacade } from '../../oracle/facade.js';
 import { choosePrice } from '../../pricing/orchestrator.js';
 import { createInvoice } from '@smart/core-domain/invoicing';
 
@@ -24,5 +23,3 @@ export const appRouter = t.router({
       })
   })
 });
-
-export type AppRouter = typeof appRouter;
