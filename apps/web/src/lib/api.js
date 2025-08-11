@@ -50,4 +50,7 @@ export const api = {
 
   // Default plan via tRPC
   runDefaultPlan: (ctx) => trpc.orchestration.runDefaultPlan.mutate(ctx),
+
+  // LLM planner via tRPC
+  planAndRun: (goal, context) => trpc.orchestration.planAndRun.mutate({ goal, context }),
 };

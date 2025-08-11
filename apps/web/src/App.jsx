@@ -58,6 +58,11 @@ export default function App(){
     return { events: res.events || [], response: res.ok ? "Plan executed." : `Plan failed: ${res.error}` };
    }
 
+  if (text.toLowerCase().startsWith("plan:")){
+    const goal = text.slice(5).trim();
+    const res = await api.planAndRun(goal, { sku: reportSku, date: new Date().toISOString().slice(0,10) });
+    return { events: res.results || [], response: `Planned and ran. Steps: ${res.results?.length||0}` };
+  }
   const r = await api.ask(text);
   return { events: [], response: r.answer || "No response." };
   }

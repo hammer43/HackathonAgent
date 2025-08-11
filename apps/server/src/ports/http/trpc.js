@@ -7,6 +7,9 @@ import { InvoiceAgent } from '@smart/agents/invoicing';
 import { PlanSchema } from '@smart/shared/schemas';
 import { executePlan } from '../../tools/executor.js';
 import { buildDefaultPlan } from '../../tools/defaultPlan.js';
+import { planAndRun as planningAgent } from '@smart/agents/planningAgent';
+import { TOOLS } from '../../tools/index.js';
+import { askLLM } from '../../llm/client.js';
 
 const t = initTRPC.create();
 
@@ -50,6 +53,13 @@ export const appRouter = t.router({
       .mutation(async ({ input }) => {
         const plan = buildDefaultPlan(input);
         return executePlan(plan);
+      }),
+    planAndRun: t.procedure
+      .input(z.object({ goal: z.string(), context: z.record(z.any()).default({}) }))
+      .mutation(async ({ input }) => {
+        const toolFns = Object.fromEntries(Object.entries(TOOLS).map(([name, fn]) => [name, (args) => fn({ context: {}, steps: {} }, args, () => {})]));
+        const res = await planningAgent({ goal: input.goal, context: input.context, llm: async (prompt)=> (await askLLM({ prompt })).text }, { toolFns });
+        return res;
       })
   })
 });
