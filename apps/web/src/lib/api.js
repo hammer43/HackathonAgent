@@ -1,4 +1,7 @@
 // ui/src/lib/api.js
+import { createClient } from './trpc';
+const trpc = createClient();
+
 const _report = {
   kpis: (days = 7) => fetch(`/api/report/kpis?days=${days}`).then((r) => r.json()),
   conv: (sku, buckets = 6) =>
@@ -7,23 +10,13 @@ const _report = {
 };
 
 export const api = {
-  // Pricing
-  choose: (body) =>
-    fetch(`/api/pricing/choose`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    }).then((r) => r.json()),
+  // Pricing via tRPC
+  choose: (body) => trpc.pricing.quote.query(body),
 
-  // Invoice
-  invoice: (body) =>
-    fetch(`/api/invoice/create`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    }).then((r) => r.json()),
+  // Invoice via tRPC
+  invoice: (body) => trpc.invoicing.issue.mutate(body),
 
-  // Bandit feedback
+  // Bandit feedback (keep REST for now)
   feedback: (body) =>
     fetch(`/api/bandit/feedback`, {
       method: "POST",
@@ -40,7 +33,7 @@ export const api = {
   // Namespaced reports for new code
   report: _report,
 
-  // Plan + LLM
+  // Plan + LLM (REST)
   execPlan: (plan) =>
     fetch(`/api/execute-plan`, {
       method: "POST",

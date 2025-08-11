@@ -11,7 +11,12 @@
     "dev:server": "pnpm --filter ./apps/server dev",
     "dev:web": "pnpm --filter ./apps/web dev",
     "build": "pnpm -r build",
-    "lint": "echo todo",
+    "lint": "eslint .",
+    "format": "prettier -w .",
     "test": "echo no-tests-yet"
+  },
+  "devDependencies": {
+    "eslint": "^9.8.0",
+    "prettier": "^3.3.3"
   }
 }
