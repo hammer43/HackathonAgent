@@ -1,4 +1,11 @@
 // ui/src/lib/api.js
+const _report = {
+  kpis: (days = 7) => fetch(`/api/report/kpis?days=${days}`).then((r) => r.json()),
+  conv: (sku, buckets = 6) =>
+    fetch(`/api/report/conversion-by-price?sku=${encodeURIComponent(sku || "")}&buckets=${buckets}`).then((r) => r.json()),
+  mix: (sku) => fetch(`/api/report/algorithm-mix?sku=${encodeURIComponent(sku || "")}`).then((r) => r.json()),
+};
+
 export const api = {
   // Pricing
   choose: (body) =>
@@ -24,19 +31,14 @@ export const api = {
       body: JSON.stringify(body),
     }).then((r) => r.json()),
 
-  // Reports
-  getKPIs: (days = 7) =>
-    fetch(`/api/report/kpis?days=${days}`).then((r) => r.json()),
+  // Reports (legacy flat)
+  getKPIs: (days = 7) => fetch(`/api/report/kpis?days=${days}`).then((r) => r.json()),
   getConversion: (sku, buckets = 6) =>
-    fetch(
-      `/api/report/conversion-by-price?sku=${encodeURIComponent(
-        sku || ""
-      )}&buckets=${buckets}`
-    ).then((r) => r.json()),
-  getAlgoMix: (sku) =>
-    fetch(
-      `/api/report/algorithm-mix?sku=${encodeURIComponent(sku || "")}`
-    ).then((r) => r.json()),
+    fetch(`/api/report/conversion-by-price?sku=${encodeURIComponent(sku || "")}&buckets=${buckets}`).then((r) => r.json()),
+  getAlgoMix: (sku) => fetch(`/api/report/algorithm-mix?sku=${encodeURIComponent(sku || "")}`).then((r) => r.json()),
+
+  // Namespaced reports for new code
+  report: _report,
 
   // Plan + LLM
   execPlan: (plan) =>

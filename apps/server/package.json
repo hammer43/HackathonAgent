@@ -12,6 +12,7 @@
     "express": "^4.19.2",
     "openai": "^5.12.2",
     "@smart/core-domain": "workspace:*",
-    "@smart/shared": "workspace:*"
+    "@smart/shared": "workspace:*",
+    "zod": "^3.23.8"
   }
 }
