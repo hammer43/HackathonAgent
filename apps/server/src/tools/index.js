@@ -1,7 +1,8 @@
 import { featuresFacade } from "../oracle/facade.js";
 import { choosePrice } from "../pricing/orchestrator.js";
-import { createInvoice } from "../pricing/policy/clampChain.js";
+import { createInvoice } from "@smart/core-domain/invoicing";
 import { reportKpis, reportConvByPrice, reportAlgoMix } from "./reportUtils.js";
+import { askLLM } from "../llm/client.js";
 
 export const TOOLS = {
   async fetch_features(ctx, args, emit){
@@ -35,4 +36,20 @@ export const TOOLS = {
     const mix  = await reportAlgoMix(sku);
     return { kpis, conv, mix };
   },
+  async llm_ask(ctx, args, emit){
+    const prompt = args?.prompt || ctx.context.prompt || '';
+    const r = await askLLM({ prompt });
+    emit({ level: "info", msg: `LLM tokens: ${r.usage?.total_tokens || 0}` });
+    return { answer: r.text, usage: r.usage };
+  },
+  async policy_check(ctx, args, emit){
+    const { max_price_pct = 20 } = args || {};
+    const anchor = ctx.steps.fetch_features?.features?.anchor_price || ctx.last?.features?.anchor_price;
+    const price = ctx.steps.price?.price || ctx.last?.price;
+    if (!anchor || !price) return { ok: true, reason: 'no-anchor-or-price' };
+    const cap = anchor * (1 + max_price_pct/100);
+    const ok = price <= cap;
+    emit({ level: ok?"info":"warn", msg: ok?"Policy OK":"Capped by policy" });
+    return { ok, cap };
+  }
 };
