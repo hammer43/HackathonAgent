@@ -51,11 +51,12 @@ export default function App(){
   }
   async function onAssistantIntent(text){
   if (text.toLowerCase().includes("run plan")) {
-    // … existing plan execution code …
-    return { events: res.events || [], response };
+    const sku = decision?.sku || (vertical==="flower"?"ROSE-12":"ROSE-12");
+    const date = new Date().toISOString().slice(0,10);
+    const res = await api.runDefaultPlan({ sku, date, qty: 1, po_ref: "PO-4482", epsilon, strategy });
+    return { events: res.events || [], response: res.ok ? "Plan executed." : `Plan failed: ${res.error}` };
    }
 
-  // NEW: free-form goes to LLM
   const r = await api.ask(text);
   return { events: [], response: r.answer || "No response." };
   }

@@ -7,31 +7,56 @@ import { evaluator } from "../../reflection/evaluator.js";
 import { executePlan } from "../../tools/executor.js";
 import { reportKpis, reportConvByPrice, reportAlgoMix } from "../../tools/reportUtils.js";
 import { askLLM, llmHealthCheck } from "../../llm/client.js";
-import { PricingChooseRequestSchema, InvoiceCreateRequestSchema } from "@smart/shared/schemas";
+import { PricingChooseRequestSchema, InvoiceCreateRequestSchema, PlanSchema } from "@smart/shared/schemas";
 import { appRouter } from "./trpc.js";
 import { createHTTPHandler } from "@trpc/server/adapters/standalone";
 import swaggerUi from 'swagger-ui-express';
 
+const components = {
+  schemas: {
+    PricingChooseRequest: { type: 'object', properties: { sku: { type: 'string' }, date: { type: 'string' }, epsilon: { type: 'number' }, strategy: { type: 'string', enum: ['epsilon','thompson'] } }, required: ['sku','date'] },
+    InvoiceCreateRequest: { type: 'object', properties: { po: { type: 'string' }, lines: { type: 'array', items: { type: 'object', properties: { sku: { type: 'string' }, qty: { type: 'integer' }, unit_price: { type: 'number' } }, required: ['sku','qty','unit_price'] } } } },
+    Plan: { type: 'object', properties: { context: { type: 'object', additionalProperties: true }, workflow: { type: 'array', items: { type: 'object', properties: { step: { type: 'string' }, id: { type: 'string' }, args: { type: 'object' }, out: { type: 'object' }, retries: { type: 'integer' } }, required: ['step'] } } }, required: ['workflow'] }
+  }
+};
+
 const openapi = {
   openapi: '3.0.0',
   info: { title: 'Smart APIs', version: '1.0.0' },
+  components,
   paths: {
     '/api/health': { get: { summary: 'Health check' } },
-    '/api/pricing/choose': { post: { summary: 'Choose price' } },
-    '/api/invoice/create': { post: { summary: 'Create invoice' } },
+    '/api/pricing/choose': {
+      post: {
+        summary: 'Choose price',
+        requestBody: { required: true, content: { 'application/json': { schema: { $ref: '#/components/schemas/PricingChooseRequest' }, example: { sku: 'ROSE-12', date: '2024-08-10', strategy: 'thompson' } } } },
+        responses: { '200': { description: 'Decision', content: { 'application/json': { example: { sku: 'ROSE-12', price: 49.5, selection: { model: 'Elasticity' } } } } } }
+      }
+    },
+    '/api/invoice/create': {
+      post: {
+        summary: 'Create invoice',
+        requestBody: { required: true, content: { 'application/json': { schema: { $ref: '#/components/schemas/InvoiceCreateRequest' }, example: { po: 'PO-123', lines: [{ sku: 'ROSE-12', qty: 2, unit_price: 49.5 }] } } } },
+        responses: { '200': { description: 'Invoice JSON' } }
+      }
+    },
     '/api/report/kpis': { get: { summary: 'KPIs' } },
     '/api/report/conversion-by-price': { get: { summary: 'Conversion by price' } },
     '/api/report/algorithm-mix': { get: { summary: 'Algorithm mix' } },
-    '/api/execute-plan': { post: { summary: 'Execute plan (legacy)' } },
+    '/api/execute-plan': {
+      post: {
+        summary: 'Execute plan (legacy)',
+        requestBody: { required: true, content: { 'application/json': { schema: { type: 'object', properties: { plan: { $ref: '#/components/schemas/Plan' } }, required: ['plan'] } } } },
+        responses: { '200': { description: 'Plan run result' } }
+      }
+    }
   }
 };
 
 export const apiRouter = express.Router();
 
-// docs
 apiRouter.use('/docs', swaggerUi.serve, swaggerUi.setup(openapi));
 
-// mount tRPC as sub-app
 const trpcHandler = createHTTPHandler({ router: appRouter });
 apiRouter.use("/trpc", (req, res) => trpcHandler(req, res));
 

@@ -6,6 +6,7 @@ import { PricingAgent } from '@smart/agents/pricing';
 import { InvoiceAgent } from '@smart/agents/invoicing';
 import { PlanSchema } from '@smart/shared/schemas';
 import { executePlan } from '../../tools/executor.js';
+import { buildDefaultPlan } from '../../tools/defaultPlan.js';
 
 const t = initTRPC.create();
 
@@ -43,6 +44,12 @@ export const appRouter = t.router({
       .input(PlanSchema)
       .mutation(async ({ input }) => {
         return executePlan(input);
+      }),
+    runDefaultPlan: t.procedure
+      .input(z.object({ sku: z.string(), date: z.string(), qty: z.number().int().positive().default(1), po_ref: z.string().nullable().optional(), epsilon: z.number().optional(), strategy: z.enum(['epsilon','thompson']).optional() }))
+      .mutation(async ({ input }) => {
+        const plan = buildDefaultPlan(input);
+        return executePlan(plan);
       })
   })
 });
