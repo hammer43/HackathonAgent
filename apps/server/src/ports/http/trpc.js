@@ -2,6 +2,8 @@ import { initTRPC } from '@trpc/server';
 import { z } from 'zod';
 import { choosePrice } from '../../pricing/orchestrator.js';
 import { createInvoice } from '@smart/core-domain/invoicing';
+import { PricingAgent } from '@smart/agents/pricing';
+import { InvoiceAgent } from '@smart/agents/invoicing';
 
 const t = initTRPC.create();
 
@@ -13,6 +15,12 @@ export const appRouter = t.router({
         const { sku, date, epsilon = 0.05, strategy = 'epsilon' } = input;
         const out = await choosePrice({ sku, date, epsilon, strategy });
         return out;
+      }),
+    agentQuote: t.procedure
+      .input(z.object({ sku: z.string(), date: z.string(), epsilon: z.number().optional(), strategy: z.enum(['epsilon','thompson']).optional() }))
+      .query(async ({ input }) => {
+        const agent = await PricingAgent({ choosePricePort: choosePrice }, input);
+        return agent.decision;
       })
   }),
   invoicing: t.router({
@@ -20,6 +28,12 @@ export const appRouter = t.router({
       .input(z.object({ po: z.string().optional(), lines: z.array(z.object({ sku: z.string(), qty: z.number().int().positive(), unit_price: z.number().nonnegative() })) }))
       .mutation(async ({ input }) => {
         return createInvoice(input);
+      }),
+    agentIssue: t.procedure
+      .input(z.object({ po: z.string().optional(), lines: z.array(z.object({ sku: z.string(), qty: z.number().int().positive(), unit_price: z.number().nonnegative() })) }))
+      .mutation(async ({ input }) => {
+        const agent = await InvoiceAgent({ createInvoicePort: createInvoice }, input);
+        return agent.invoice;
       })
   })
 });

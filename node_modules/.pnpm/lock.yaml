@@ -20,6 +20,9 @@ importers:
 
   apps/server:
     dependencies:
+      '@smart/agents':
+        specifier: workspace:*
+        version: link:../../packages/agents
       '@smart/core-domain':
         specifier: workspace:*
         version: link:../../packages/core-domain
